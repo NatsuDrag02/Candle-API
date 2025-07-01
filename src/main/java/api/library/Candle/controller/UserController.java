@@ -1,10 +1,7 @@
 package api.library.Candle.controller;
 
 import api.library.Candle.domain.exceptions.EmailAlreadyExistsException;
-import api.library.Candle.domain.model.dto.CreatedUserDto;
-import api.library.Candle.domain.model.dto.ErrorResponse;
-import api.library.Candle.domain.model.dto.RegisterUserDto;
-import api.library.Candle.domain.model.dto.RequestDto;
+import api.library.Candle.domain.model.dto.*;
 import api.library.Candle.service.EmailVerificationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,10 +24,24 @@ public class UserController {
     @Autowired
     private EmailVerificationService verificationService;
 
+    @PostMapping("/send-recovery")
+    public ResponseEntity<?> sendRecoveryVerificationEmail(@RequestBody @Valid RecoveryRequestDto recovery){
+        verificationService.sendRecoveryVerification(
+                recovery.email()
+        );
+        return ResponseEntity.ok("Código de recuperação enviado com sucesso!");
+    }
+
+    @PostMapping("/confirm-recovery")
+    public ResponseEntity<?> confirmRecovery(@RequestBody @Valid ConfirmRecoveryDto dto) {
+        verificationService.confirmRecovery(dto.email(), dto.token(), dto.newPassword());
+        return ResponseEntity.ok("Senha atualizada com sucesso!");
+    }
+
 
     @PostMapping("/send-verification")
-    public ResponseEntity<?> sendVerification(@RequestBody @Valid RegisterUserDto register) {
-        verificationService.sendVerification(
+    public ResponseEntity<?> sendRegisterVerification(@RequestBody @Valid RegisterUserDto register) {
+        verificationService.sendRegisterVerification(
                 register.username(),
                 register.email(),
                 register.password()

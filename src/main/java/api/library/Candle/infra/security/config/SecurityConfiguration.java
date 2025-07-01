@@ -60,8 +60,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/users/send-verification", "/auth/login",
-                                "/users/confirm-verification").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/users/send-verification",
+                                "/auth/login",
+                                "/users/confirm-verification",
+                                "/users/send-recovery",
+                                "/users/confirm-recovery").permitAll()
                         .requestMatchers("/auth/refresh").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()

@@ -47,6 +47,7 @@ public class User implements UserDetails {
         this.email = email;
         this.role = role;
     }
-
-
-}
+        public void changePassword(String newEncryptedPassword) {
+            this.password = newEncryptedPassword;
+        }
+    }
